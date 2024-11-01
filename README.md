@@ -9,7 +9,7 @@
 
 ## Key Features
 
-- **Responsive**: This Admin dashboard can adapt to some window size.
+- **Responsive**: This Admin dashboard can adapt to variative window size.
 
 - **Secure Login**: Admins can securely log in to access the full dashboard.
   
