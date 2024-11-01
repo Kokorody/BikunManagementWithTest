@@ -9,6 +9,8 @@
 
 ## Key Features
 
+- **Responsive**: This Admin dashboard can adapt to some window size.
+
 - **Secure Login**: Admins can securely log in to access the full dashboard.
   
 - **Tracker Integration**: A live tracker page displays an embedded web view from `bikun.ui.ac.id`, providing a real-time overview of bus locations.
