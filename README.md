@@ -36,5 +36,13 @@ This platform is ideal for ensuring that fleet operations run efficiently, offer
 
 - **Backend**: Java with Hibernate for data persistence and fleet information management.
 - **Frontend**: Web-based dashboard for accessible, responsive, and streamlined user interaction.
-  
+
+# Login Page
+![Screenshot 2024-11-01 204633](https://github.com/user-attachments/assets/365229a9-6952-440f-baee-8556a346bdc3)
+
+# Main page
+![Screenshot 2024-11-01 204704](https://github.com/user-attachments/assets/b03261b8-a8e7-4eda-b75e-bf108cf441ce)
+
+
+
 
