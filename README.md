@@ -39,6 +39,26 @@ This platform is ideal for ensuring that fleet operations run efficiently, offer
 - **Backend**: Java with Hibernate for data persistence and fleet information management.
 - **Frontend**: Web-based dashboard for accessible, responsive, and streamlined user interaction.
 
+### Cloning
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/Kokorody/BikunManagementWithTest.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd BikunManagementWithTest
+    ```
+## Contact
+
+If you have any questions or need further assistance, feel free to reach out:
+
+- **Email**: kmsmuhammadrafi@gmail.com
+
+
 # Login Page
 ![Screenshot 2024-11-01 204633](https://github.com/user-attachments/assets/365229a9-6952-440f-baee-8556a346bdc3)
 
