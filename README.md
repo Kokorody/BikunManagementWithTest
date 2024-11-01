@@ -36,7 +36,4 @@ This platform is ideal for ensuring that fleet operations run efficiently, offer
 - **Backend**: Java with Hibernate for data persistence and fleet information management.
 - **Frontend**: Web-based dashboard for accessible, responsive, and streamlined user interaction.
   
-## Getting Started
-
-Clone the repository, configure your environment, and follow the installation steps in the documentation to get started with Bikun Fleet Management! 
 
