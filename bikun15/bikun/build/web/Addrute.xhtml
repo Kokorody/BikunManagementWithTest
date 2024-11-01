@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="mb-4 text-center">Add Rute</h1>
+
+            <h:form id="addRuteForm">
+                <!-- Row for ID Rute -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="idRute" value="ID Rute:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="idRute" value="#{ruteBean.newRute.idRute}" required="true" class="form-control">
+                            <f:ajax event="blur" render="idRuteError" />
+                        </h:inputText>
+                        <h:message for="idRute" id="idRuteError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Row for Jurusan -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="jurusan" value="Jurusan:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="jurusan" value="#{ruteBean.newRute.jurusan}" required="true" class="form-control">
+                            <f:ajax event="blur" render="jurusanError" />
+                        </h:inputText>
+                        <h:message for="jurusan" id="jurusanError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Button Row -->
+                <div class="row mt-4">
+                    <div class="col-md-6 text-center">
+                        <h:commandButton value="Save" action="#{ruteBean.addRute()}" styleClass="btn btn-success btn-block" />
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h:commandButton value="Back" action="rute.xhtml" immediate="true" styleClass="btn btn-secondary btn-block" />
+                    </div>
+                </div>
+
+                <!-- Global Error Messages -->
+                <div class="row mt-2">
+                    <div class="col-md-12 text-center">
+                        <h:messages globalOnly="true" layout="table" styleClass="error-messages text-center" style="color: red;" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="text-center">RUTE</h1>
+
+            <!-- Rute Table -->
+            <h:form id="ruteForm">
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <h:dataTable value="#{ruteBean.ruteList}" var="rute" class="table table-hover">
+                            <h:column>
+                                <f:facet name="header">ID Rute</f:facet>
+                                <h:outputText value="#{rute.idRute}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Jurusan</f:facet>
+                                <h:outputText value="#{rute.jurusan}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                <h:commandButton value="Edit" action="#{ruteBean.edit(rute)}" styleClass="btn btn-primary btn-sm" />
+                                <h:commandButton value="Delete" action="#{ruteBean.delete(rute)}" styleClass="btn btn-danger btn-sm" />
+                            </h:column>
+                        </h:dataTable>
+                    </tbody>
+                </table>
+
+                <!-- Add Rute Button -->
+                <h:commandButton value="ADD RUTE" action="Addrute.xhtml" styleClass="btn btn-secondary mx-2" />
+            </h:form>
+
+            <!-- Edit Rute Form -->
+            <h:form id="editForm" rendered="#{ruteBean.editFormVisible}">
+                <h3 class="text-center mb-4">Edit Rute</h3>
+                
+<!--                 Row for ID Rute 
+               <div class="row mb-3">
+                 <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editIdRute" value="ID Rute:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editIdRute" value="#{ruteBean.selectedRute.idRute}" required="true" class="form-control">
+                            <f:ajax event="keyup" render="editIdRuteError" />
+                        </h:inputText>
+                        <h:message for="editIdRute" id="editIdRuteError" style="color: red;" />
+                    </div>
+                </div>-->
+
+                <!-- Row for Jurusan -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editJurusan" value="Jurusan:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editJurusan" value="#{ruteBean.selectedRute.jurusan}" required="true" class="form-control">
+                            <f:ajax event="keyup" render="editJurusanError" />
+                        </h:inputText>
+                        <h:message for="editJurusan" id="editJurusanError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Button Row -->
+                <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                        <h:commandButton value="Update" action="#{ruteBean.update()}" styleClass="btn btn-success mx-2" />
+                        <h:commandButton value="Cancel" action="#{ruteBean.resetSelectedRute()}" styleClass="btn btn-secondary mx-2" immediate="true" />
+                    </div>
+                </div>
+
+                <!-- Global Error Messages -->
+                <div class="row mt-2">
+                    <div class="col-md-12 text-center">
+                        <h:messages globalOnly="true" layout="table" styleClass="error-messages text-center" style="color: red;" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="col-md-6"> <!-- Column with appropriate width -->
+                <h1 class="mb-4 text-center">Add Bus</h1>
+                <h:form id="addForm" class="form-horizontal">
+                    
+                    <!-- Row for No Body -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <h:outputLabel for="noBody" value="No Body:" class="form-label"/>
+                        </div>
+                        <div class="col-md-9">
+                            <h:inputText id="noBody" value="#{busBean.newBus.noBody}" required="true"
+                                         validator="#{busBean.noBodyValidator}" class="form-control">
+                                <f:ajax event="keyup" render="noBodyError" />
+                                <f:attribute name="placeholder" value="Enter No Body (e.g., DMR-6601)" />
+                            </h:inputText>
+                            <h:message for="noBody" id="noBodyError" style="color: red;" />
+                        </div>
+                    </div>
+
+                    <!-- Row for Plat Nomor -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <h:outputLabel for="platNomor" value="Plat Nomor:" class="form-label"/>
+                        </div>
+                        <div class="col-md-9">
+                            <h:inputText id="platNomor" value="#{busBean.newBus.platNomor}" required="true"
+                                         validator="#{busBean.platNomorValidator}" class="form-control">
+                                <f:ajax event="keyup" render="platNomorError" />
+                                <f:attribute name="placeholder" value="Enter Plat Nomor (e.g., B 1234 EE)" />
+                            </h:inputText>
+                            <h:message for="platNomor" id="platNomorError" style="color: red;" />
+                        </div>
+                    </div>
+
+                    <!-- Row for Tipe Bus -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <h:outputLabel for="tipeBus" value="Tipe Bus:" class="form-label"/>
+                        </div>
+                        <div class="col-md-9">
+                            <h:inputText id="tipeBus" value="#{busBean.newBus.tipeBus}" required="true"
+                                         validator="#{busBean.tipeBusValidator}" class="form-control">
+                                <f:ajax event="keyup" render="tipeBusError" />
+                                <f:attribute name="placeholder" value="Enter Tipe Bus (e.g., Minibus)" />
+                            </h:inputText>
+                            <h:message for="tipeBus" id="tipeBusError" style="color: red;" />
+                        </div>
+                    </div>
+
+                    <!-- Row for Pemilik -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <h:outputLabel for="pemilik" value="Pemilik:" class="form-label"/>
+                        </div>
+                        <div class="col-md-9">
+                            <h:inputText id="pemilik" value="#{busBean.newBus.pemilik}" class="form-control">
+                                <f:attribute name="placeholder" value="Enter Pemilik (optional)" />
+                            </h:inputText>
+                            <h:message for="pemilik" style="color: red;" />
+                        </div>
+                    </div>
+
+                    <!-- Row for Status -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <h:outputLabel for="status" value="Status:" class="form-label"/>
+                        </div>
+                        <div class="col-md-9">
+                            <h:selectOneMenu id="status" value="#{busBean.newBus.status}" required="true" class="form-control">
+                                <f:selectItem itemLabel="Select Status" itemValue="" />
+                                <f:selectItem itemLabel="Depot" itemValue="depot" />
+                                <f:selectItem itemLabel="Maintenance" itemValue="maintenance" />
+                                <f:ajax event="change" render="statusError" />
+                            </h:selectOneMenu>
+                            <h:message for="status" id="statusError" style="color: red;" />
+                        </div>
+                    </div>
+
+                    <!-- Button Row -->
+                    <div class="row mt-3">
+                        <div class="col-md-12 text-center">
+                            <h:commandButton id="saveButton" value="Save" action="#{busBean.addBus()}"
+                                             styleClass="btn btn-success mx-2" />
+                            <h:commandButton value="Back" action="bus.xhtml" styleClass="btn btn-secondary mx-2"
+                                             immediate="true" />
+                        </div>
+                    </div>
+
+                    <!-- Global Error Messages -->
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-center">
+                            <h:messages globalOnly="true" layout="table" styleClass="error-messages text-center" style="color: red;" />
+                        </div>
+                    </div>
+
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

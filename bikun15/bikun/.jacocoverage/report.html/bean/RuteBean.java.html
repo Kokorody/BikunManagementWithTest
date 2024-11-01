@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RuteBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">RuteBean.java</span></div><h1>RuteBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.RuteDAO;
+import helper.FacesContextHelper; // Assuming you want to use a helper for messages
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.List;
+import pojo.Rute;
+
+@ManagedBean(name = &quot;ruteBean&quot;)
+@ViewScoped
+public class RuteBean implements Serializable {
+
+    private final RuteDAO ruteDAO;
+    private final FacesContextHelper facesContextHelper; // Injected helper for messages
+    private List&lt;Rute&gt; ruteList;
+<span class="fc" id="L20">    private Rute selectedRute = new Rute();</span>
+<span class="fc" id="L21">    private Rute newRute = new Rute();</span>
+<span class="fc" id="L22">    private boolean editFormVisible = false;</span>
+<span class="fc" id="L23">    private boolean addFormVisible = false;</span>
+
+    // Constructor for dependency injection with RuteDAO and FacesContextHelper
+    @Inject
+<span class="fc" id="L27">    public RuteBean(RuteDAO ruteDAO, FacesContextHelper facesContextHelper) {</span>
+<span class="fc" id="L28">        this.ruteDAO = ruteDAO;</span>
+<span class="fc" id="L29">        this.facesContextHelper = facesContextHelper;</span>
+<span class="fc" id="L30">        loadRutes();</span>
+<span class="fc" id="L31">    }</span>
+
+    // Default constructor used when no injection
+    public RuteBean() {
+<span class="nc" id="L35">        this(new RuteDAO(), new FacesContextHelper()); // Instantiate default DAO and Helper</span>
+<span class="nc" id="L36">    }</span>
+
+    // Method to load all routes from the DAO
+    public void loadRutes() {
+<span class="fc" id="L40">        ruteList = ruteDAO.getAllRutes();</span>
+<span class="fc" id="L41">    }</span>
+
+    // Getter methods
+    public List&lt;Rute&gt; getRuteList() {
+<span class="fc" id="L45">        return ruteList;</span>
+    }
+
+    public Rute getSelectedRute() {
+<span class="fc" id="L49">        return selectedRute;</span>
+    }
+
+    public Rute getNewRute() {
+<span class="fc" id="L53">        return newRute;</span>
+    }
+
+    public boolean isEditFormVisible() {
+<span class="fc" id="L57">        return editFormVisible;</span>
+    }
+
+    public boolean isAddFormVisible() {
+<span class="fc" id="L61">        return addFormVisible;</span>
+    }
+
+    // Method to add a new route
+    public void addRute() {
+        try {
+<span class="fc" id="L67">            ruteDAO.addRute(newRute);</span>
+<span class="fc" id="L68">            loadRutes();</span>
+<span class="fc" id="L69">            resetNewRute();</span>
+<span class="fc" id="L70">            facesContextHelper.addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Rute added successfully!&quot;, null));
+<span class="fc" id="L72">        } catch (Exception e) {</span>
+<span class="fc" id="L73">            e.printStackTrace();</span>
+<span class="fc" id="L74">            facesContextHelper.addMessage(null,</span>
+<span class="fc" id="L75">                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error adding rute: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">    }</span>
+
+    // Method to edit an existing route
+    public void edit(Rute rute) {
+<span class="fc" id="L81">        this.selectedRute = rute;</span>
+<span class="fc" id="L82">        this.editFormVisible = true;</span>
+<span class="fc" id="L83">    }</span>
+
+    // Method to update route data
+    public void update() {
+        try {
+<span class="fc" id="L88">            ruteDAO.updateRute(selectedRute);</span>
+<span class="fc" id="L89">            loadRutes();</span>
+<span class="fc" id="L90">            resetSelectedRute();</span>
+<span class="fc" id="L91">            facesContextHelper.addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Rute updated successfully!&quot;, null));
+<span class="fc" id="L93">        } catch (Exception e) {</span>
+<span class="fc" id="L94">            e.printStackTrace();</span>
+<span class="fc" id="L95">            facesContextHelper.addMessage(null,</span>
+<span class="fc" id="L96">                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error updating rute: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">    }</span>
+
+    // Method to delete a route
+    public void delete(Rute rute) {
+        try {
+<span class="fc" id="L103">            ruteDAO.deleteRute(rute);</span>
+<span class="fc" id="L104">            loadRutes();</span>
+<span class="fc" id="L105">            facesContextHelper.addMessage(null,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Rute deleted successfully!&quot;, null));
+<span class="fc" id="L107">        } catch (Exception e) {</span>
+<span class="fc" id="L108">            e.printStackTrace();</span>
+<span class="fc" id="L109">            facesContextHelper.addMessage(null,</span>
+<span class="fc" id="L110">                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error deleting rute: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L111">        }</span>
+<span class="fc" id="L112">    }</span>
+
+    // Reset form for adding a new route
+    public void resetNewRute() {
+<span class="fc" id="L116">        this.newRute = new Rute();</span>
+<span class="fc" id="L117">        this.addFormVisible = false;</span>
+<span class="fc" id="L118">    }</span>
+
+    // Reset the selected route after editing
+    public void resetSelectedRute() {
+<span class="fc" id="L122">        this.selectedRute = new Rute();</span>
+<span class="fc" id="L123">        this.editFormVisible = false;</span>
+<span class="fc" id="L124">    }</span>
+
+    // Fetch a Rute by its idRute (used by the Converter)
+    public Rute getRuteById(String idRute) {
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (Rute rute : ruteList) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (rute.getIdRute().equals(idRute)) {</span>
+<span class="nc" id="L130">                return rute;</span>
+            }
+<span class="nc" id="L132">        }</span>
+<span class="nc" id="L133">        return null;  // Return null if no matching Rute is found</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 24, 2024 10:15:08 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Driver" table="driver" catalog="bikun" optimistic-lock="version">
+        <id name="idDriver" type="java.lang.Integer">
+            <column name="id_driver" />
+            <generator class="identity" />
+        </id>
+        <property name="namaDriver" type="string">
+            <column name="nama_driver" not-null="true" />
+        </property>
+        <property name="noSim" type="string">
+            <column name="no_sim" not-null="true" />
+        </property>
+        <property name="operator" type="string">
+            <column name="operator" not-null="true" />
+        </property>
+        <set name="fleets" table="fleet" inverse="true" lazy="false">
+            <key>
+                <column name="id_driver" not-null="true" />
+            </key>
+            <one-to-many class="pojo.Fleet" />
+        </set>
+    </class>
+</hibernate-mapping>

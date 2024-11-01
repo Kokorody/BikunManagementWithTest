@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AdminDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">AdminDAO.java</span></div><h1>AdminDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.Query; // Use this import for older Hibernate versions
+import pojo.Admin;
+import util.HibernateUtil;
+
+public class AdminDAO {
+    private Session session; 
+
+    // Default constructor
+<span class="fc" id="L14">    public AdminDAO() {</span>
+<span class="fc" id="L15">        this.session = HibernateUtil.getSessionFactory().openSession(); // Obtain the session</span>
+<span class="fc" id="L16">    }</span>
+
+    // Constructor for testing purposes
+<span class="fc" id="L19">    public AdminDAO(Session session) {</span>
+<span class="fc" id="L20">        this.session = session;</span>
+<span class="fc" id="L21">    }</span>
+
+    // Method to validate username and password for login
+    public boolean validate(String username, String password) {
+<span class="fc" id="L25">        Admin admin = getByUsername(username);</span>
+<span class="pc bpc" id="L26" title="1 of 4 branches missed.">        return admin != null &amp;&amp; admin.getPassword().equals(password);</span>
+    }
+
+    // Method to check if a username exists
+    public boolean isUsernameExists(String username) {
+<span class="fc" id="L31">        Transaction trans = null; // Transaction for the method</span>
+<span class="fc" id="L32">        boolean exists = false;</span>
+
+        try {
+<span class="fc" id="L35">            trans = session.beginTransaction(); // Use the injected session</span>
+<span class="fc" id="L36">            Query query = session.createQuery(&quot;FROM Admin WHERE username = :username&quot;);</span>
+<span class="fc" id="L37">            query.setParameter(&quot;username&quot;, username);</span>
+<span class="fc" id="L38">            List&lt;Admin&gt; results = query.list();</span>
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            exists = !results.isEmpty(); // Check if the list is not empty</span>
+<span class="fc" id="L41">            trans.commit();</span>
+<span class="fc" id="L42">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">            if (trans != null) {</span>
+<span class="fc" id="L44">                trans.rollback(); // Rollback on error</span>
+            }
+<span class="fc" id="L46">            System.out.println(&quot;Error: &quot; + e);</span>
+        } finally {
+<span class="pc" id="L48">            session.close(); // Ensure the session is closed</span>
+<span class="fc" id="L49">        }</span>
+
+<span class="fc" id="L51">        return exists;</span>
+    }
+
+    // Method to retrieve an Admin by username
+    public Admin getByUsername(String username) {
+<span class="fc" id="L56">        Transaction trans = null; // Transaction for the method</span>
+<span class="fc" id="L57">        Admin admin = null;</span>
+
+        try {
+<span class="fc" id="L60">            trans = session.beginTransaction(); // Use the injected session</span>
+<span class="fc" id="L61">            Query query = session.createQuery(&quot;FROM Admin WHERE username = :username&quot;);</span>
+<span class="fc" id="L62">            query.setParameter(&quot;username&quot;, username);</span>
+<span class="fc" id="L63">            List&lt;Admin&gt; results = query.list();</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (!results.isEmpty()) {</span>
+<span class="fc" id="L66">                admin = (Admin) results.get(0); // Get the first result</span>
+            }
+<span class="fc" id="L68">            trans.commit();</span>
+<span class="fc" id="L69">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (trans != null) {</span>
+<span class="fc" id="L71">                trans.rollback(); // Rollback on error</span>
+            }
+<span class="fc" id="L73">            System.out.println(&quot;Error: &quot; + e);</span>
+        } finally {
+<span class="pc" id="L75">            session.close(); // Ensure the session is closed</span>
+<span class="fc" id="L76">        }</span>
+
+<span class="fc" id="L78">        return admin; // Return the Admin object or null if not found</span>
+    }
+
+    // Additional method to check if password is correct for a username
+    public boolean isPasswordCorrect(String username, String password) {
+<span class="fc" id="L83">        Admin admin = getByUsername(username);</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">        return admin != null &amp;&amp; admin.getPassword().equals(password); // Compare stored password with provided password</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

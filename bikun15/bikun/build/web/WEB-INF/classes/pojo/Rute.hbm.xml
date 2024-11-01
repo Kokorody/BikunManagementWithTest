@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 24, 2024 10:15:08 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Rute" table="rute" catalog="bikun" optimistic-lock="version">
+        <id name="idRute" type="string">
+            <column name="id_rute" length="11" />
+            <generator class="assigned" />
+        </id>
+        <property name="jurusan" type="string">
+            <column name="jurusan" not-null="true" />
+        </property>
+        <set name="fleets" table="fleet" inverse="true" lazy="false">
+            <key>
+                <column name="id_rute" length="11" not-null="true" />
+            </key>
+            <one-to-many class="pojo.Fleet" />
+        </set>
+    </class>
+</hibernate-mapping>

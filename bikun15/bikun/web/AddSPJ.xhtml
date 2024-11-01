@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="text-center">Add SPJ</h1>
+
+            <h:form id="addSpjForm">
+                <!-- Select Rute -->
+                <div class="mb-3">
+                    <h:outputLabel value="Rute:" for="rute" />
+                    <h:selectOneMenu id="rute" value="#{spjBean.newFleet.rute}" converter="RuteConverter">
+                        <f:selectItems value="#{ruteBean.ruteList}" var="rute" itemValue="#{rute}" itemLabel="#{rute.jurusan}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <!-- Select Bus -->
+                <div class="mb-3">
+                    <h:outputLabel value="ID Bus:" for="idBus" />
+                    <h:selectOneMenu id="idBus" value="#{spjBean.newFleet.bus}" converter="BusConverter">
+                        <f:selectItems value="#{busBean.availableBuses}" var="bus" itemValue="#{bus}" itemLabel="#{bus.idBus}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <!-- ID Driver -->
+                <div class="mb-3">
+                    <h:outputLabel value="ID Driver:" for="idDriver" />
+                    <h:selectOneMenu id="idDriver" value="#{spjBean.newFleet.driver}" converter="DriverConverter">
+                        <f:selectItems value="#{driverBean.availableDrivers}" var="driver" itemValue="#{driver}" itemLabel="#{driver.namaDriver}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <h:commandButton value="Add" action="#{spjBean.addSPJ()}" styleClass="btn btn-success" />
+                <h:commandButton value="Back" type="button" onclick="window.location='SPJ.xhtml';" styleClass="btn btn-danger" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

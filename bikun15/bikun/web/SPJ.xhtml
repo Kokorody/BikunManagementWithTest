@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="text-center">Surat Perintah Jalan</h1>
+
+            <h:form id="spjForm">
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <h:dataTable value="#{spjBean.fleetList}" var="fleet" class="table table-hover">  <!-- Updated to fleet -->
+                            <h:column>
+                                <f:facet name="header">ID Fleet</f:facet>
+                                <h:outputText value="#{fleet.idFleet}" />  <!-- Updated to fleet -->
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Rute</f:facet>
+                                <h:outputText value="#{fleet.rute}" />  <!-- Updated to fleet -->
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Bus</f:facet>
+                                <h:outputText value="#{fleet.bus}" />  <!-- Updated to fleet -->
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Driver</f:facet>
+                                <h:outputText value="#{fleet.driver}" />  <!-- Updated to fleet -->
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                
+                                <h:commandButton value="Delete" action="#{spjBean.delete(fleet)}" styleClass="btn btn-danger btn-sm" />
+                            </h:column>
+                        </h:dataTable>
+                    </tbody>
+                </table>
+
+                <h:commandButton value="Add SPJ" action="AddSPJ.xhtml" styleClass="btn btn-secondary mx-2" />
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

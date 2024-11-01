@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DriverBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">DriverBean.java</span></div><h1>DriverBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.DriverDAO;
+import helper.FacesContextHelper; // Assuming you want to use a helper for messages
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
+import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.List;
+import java.util.regex.Pattern;
+import javax.inject.Inject;
+import pojo.Driver;
+
+@ManagedBean(name = &quot;driverBean&quot;)
+@ViewScoped
+public class DriverBean implements Serializable {
+
+    private final DriverDAO driverDAO; // Now injected via constructor
+    private List&lt;Driver&gt; driverList;
+    private List&lt;Driver&gt; availableDrivers;
+<span class="fc" id="L24">    private Driver selectedDriver = new Driver();</span>
+<span class="fc" id="L25">    private Driver newDriver = new Driver();</span>
+<span class="fc" id="L26">    private boolean editFormVisible = false;</span>
+<span class="fc" id="L27">    private boolean addFormVisible = false;</span>
+
+    // Inject FacesContextHelper
+    private FacesContextHelper facesContextHelper;
+
+    // Regex pattern for No SIM validation (16 digits)
+<span class="fc" id="L33">    private static final Pattern NO_SIM_PATTERN = Pattern.compile(&quot;^\\d{16}$&quot;);</span>
+
+    @Inject
+    private SPJBean spjBean;
+
+    // Constructor for dependency injection with both DriverDAO and FacesContextHelper
+<span class="fc" id="L39">    public DriverBean(DriverDAO driverDAO, FacesContextHelper facesContextHelper) {</span>
+<span class="fc" id="L40">        this.driverDAO = driverDAO;</span>
+<span class="fc" id="L41">        this.facesContextHelper = facesContextHelper;</span>
+<span class="fc" id="L42">        loadDrivers();</span>
+<span class="fc" id="L43">        loadAvailableDriver(); // Load available drivers</span>
+<span class="fc" id="L44">    }</span>
+
+    // Default constructor used when no injection
+    public DriverBean() {
+<span class="nc" id="L48">        this(new DriverDAO(), new FacesContextHelper()); // Instantiate default DAO and Helper</span>
+<span class="nc" id="L49">    }</span>
+
+    public void loadDrivers() {
+<span class="fc" id="L52">        driverList = driverDAO.getAllDrivers();</span>
+<span class="fc" id="L53">    }</span>
+
+    public void loadAvailableDriver() {
+<span class="fc" id="L56">        availableDrivers = driverDAO.getAvailableDrivers(); // Get available drivers</span>
+<span class="fc" id="L57">    }</span>
+
+    public List&lt;Driver&gt; getAvailableDrivers() {
+<span class="fc" id="L60">        return availableDrivers;</span>
+    }
+
+    public Driver getDriverById(int idDriver) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (Driver driver : driverList) {</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (driver.getIdDriver() == idDriver) {</span>
+<span class="nc" id="L66">                return driver;</span>
+            }
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">        return null;</span>
+    }
+
+    public List&lt;Driver&gt; getDriverList() {
+<span class="fc" id="L73">        return driverList;</span>
+    }
+
+    public Driver getSelectedDriver() {
+<span class="fc" id="L77">        return selectedDriver;</span>
+    }
+
+    public Driver getNewDriver() {
+<span class="fc" id="L81">        return newDriver;</span>
+    }
+
+    public boolean isEditFormVisible() {
+<span class="fc" id="L85">        return editFormVisible;</span>
+    }
+
+    public boolean isAddFormVisible() {
+<span class="fc" id="L89">        return addFormVisible;</span>
+    }
+
+    public void setSpjBean(SPJBean spjBean) {
+<span class="nc" id="L93">        this.spjBean = spjBean;</span>
+<span class="nc" id="L94">    }</span>
+
+    public void addDriver() {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (isNoSimValid(newDriver.getNoSim())) {</span>
+            try {
+<span class="fc" id="L99">                driverDAO.addDriver(newDriver);</span>
+<span class="fc" id="L100">                loadDrivers();</span>
+<span class="fc" id="L101">                resetNewDriver();</span>
+<span class="fc" id="L102">                facesContextHelper.addMessage(null, </span>
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Driver berhasil ditambahkan!&quot;, null));
+<span class="fc" id="L104">            } catch (Exception e) {</span>
+<span class="fc" id="L105">                e.printStackTrace();</span>
+<span class="fc" id="L106">                facesContextHelper.addMessage(null, </span>
+<span class="fc" id="L107">                        new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error saat menambahkan driver: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L108">            }</span>
+        } else {
+<span class="fc" id="L110">            facesContextHelper.addMessage(&quot;noSim&quot;, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Nomor SIM harus tepat 16 digit.&quot;, null));
+        }
+<span class="fc" id="L113">    }</span>
+
+    // Validation for No SIM field (exactly 16 digits)
+    public boolean isNoSimValid(String noSim) {
+<span class="pc bpc" id="L117" title="1 of 4 branches missed.">        return noSim != null &amp;&amp; NO_SIM_PATTERN.matcher(noSim).matches();</span>
+    }
+
+    // Method to edit an existing driver
+    public void edit(Driver driver) {
+<span class="fc" id="L122">        this.selectedDriver = driver;</span>
+<span class="fc" id="L123">        this.editFormVisible = true;</span>
+<span class="fc" id="L124">    }</span>
+
+    // Method to update driver data
+    public void update() {
+        try {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if (isFormValid()) {</span>
+<span class="fc" id="L130">                driverDAO.updateDriver(selectedDriver);</span>
+<span class="fc" id="L131">                loadDrivers();</span>
+<span class="fc" id="L132">                resetSelectedDriver();</span>
+<span class="fc" id="L133">                facesContextHelper.addMessage(null, </span>
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Driver berhasil diperbarui!&quot;, null));
+            }
+<span class="fc" id="L136">        } catch (Exception e) {</span>
+<span class="fc" id="L137">            e.printStackTrace();</span>
+<span class="fc" id="L138">            facesContextHelper.addMessage(null, </span>
+<span class="fc" id="L139">                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error memperbarui driver: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L140">        }</span>
+<span class="fc" id="L141">    }</span>
+
+    public void delete(Driver driver) {
+        try {
+<span class="fc" id="L145">            driverDAO.deleteDriver(driver);</span>
+<span class="fc" id="L146">            loadDrivers();</span>
+<span class="fc" id="L147">            facesContextHelper.addMessage(null, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Driver berhasil dihapus!&quot;, null));
+<span class="fc" id="L149">        } catch (Exception e) {</span>
+<span class="fc" id="L150">            e.printStackTrace();</span>
+<span class="fc" id="L151">            facesContextHelper.addMessage(null, </span>
+<span class="fc" id="L152">                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Kesalahan saat menghapus driver: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L153">        }</span>
+<span class="fc" id="L154">    }</span>
+
+    // Reset form for adding a new driver
+    public void resetNewDriver() {
+<span class="fc" id="L158">        this.newDriver = new Driver();</span>
+<span class="fc" id="L159">        this.addFormVisible = false;</span>
+<span class="fc" id="L160">    }</span>
+
+    // Reset the selected driver after editing
+    public void resetSelectedDriver() {
+<span class="fc" id="L164">        this.selectedDriver = new Driver();</span>
+<span class="fc" id="L165">        this.editFormVisible = false;</span>
+<span class="fc" id="L166">    }</span>
+
+    public void noSimValidator(FacesContext context, UIComponent component, Object value) {
+<span class="fc" id="L169">        String noSim = (String) value;</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (!isNoSimValid(noSim)) {</span>
+<span class="fc" id="L171">            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+                    &quot;Format Nomor SIM tidak valid. Harus tepat 16 digit.&quot;, null));
+        }
+<span class="nc" id="L174">    }</span>
+
+    // Additional form validation for the &quot;Save&quot; action
+    private boolean isFormValid() {
+<span class="fc" id="L178">        boolean valid = true;</span>
+
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (!isNoSimValid(selectedDriver.getNoSim())) {</span>
+<span class="fc" id="L181">            facesContextHelper.addMessage(&quot;noSim&quot;,</span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Format No SIM tidak valid&quot;, null));
+<span class="fc" id="L183">            valid = false;</span>
+        }
+
+<span class="fc" id="L186">        return valid;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

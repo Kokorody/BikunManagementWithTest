@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 24, 2024 10:15:08 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Fleet" table="fleet" catalog="bikun" optimistic-lock="version">
+        <id name="idFleet" type="java.lang.Integer">
+            <column name="id_fleet" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="bus" class="pojo.Bus" fetch="select">
+            <column name="id_Bus" not-null="true" />
+        </many-to-one>
+        <many-to-one name="driver" class="pojo.Driver" fetch="select">
+            <column name="id_driver" not-null="true" />
+        </many-to-one>
+        <many-to-one name="rute" class="pojo.Rute" fetch="select">
+            <column name="id_rute" length="11" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

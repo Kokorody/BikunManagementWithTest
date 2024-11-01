@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Bikun Fleet</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <ui:insert name="css"/>
+    <style>
+        /* Import regular Trajan Pro font */
+        @font-face {
+            font-family: 'Trajan Pro';
+            src: url('fonts/TrajanPro-Regular.otf') format('opentype'); /* Regular OTF font */
+        }
+
+        /* Import bold Trajan Pro OTF font */
+        @font-face {
+            font-family: 'Trajan Pro Bold';
+            src: url('fonts/TrajanPro-Bold.otf') format('opentype'); /* Bold OTF font */
+            font-weight: bold;
+        }
+
+        /* Apply Trajan Pro font to the whole page */
+        body, html {
+            font-family: 'Trajan Pro', serif;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container Layout */
+        .container-fluid {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 20%;
+            background-color: #FFD700;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+            margin: 0;
+            box-shadow: 3px 0 5px rgba(0, 0, 0, 0.1);
+            border-right: 3px solid #000; /* Add a border to distinguish */
+        }
+        
+        .sidebar h1 {
+            text-align: center;
+            font-family: 'Trajan Pro Bold', serif; /* Apply bold font here */
+            font-weight: bold;
+            font-size: 40px;
+            padding-top: 20px;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            font-family: 'Trajan Pro', serif;
+            margin-bottom: 50px;
+            font-size: 30px;
+        }
+
+        .sidebar ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .nav-item a {
+            text-decoration: none;
+            color: #000;
+            font-family: 'Trajan Pro', serif;
+            font-size: 20px;
+            padding: 10px;
+            display: block;
+            background-color: #fff;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #000;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px 10px 20px 10px;
+        }
+
+        .nav-item a:hover {
+            background-color: #000;
+            color: #FFD700;
+        }
+
+        .sidebar img {
+            width: 70%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Main Content Styling */
+        .content {
+            flex-grow: 1;
+            padding: 0px;
+            background-color: #fff;
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="container-fluid">
+        <!-- Sidebar Section -->
+        <nav class="sidebar">
+            <div>
+                <h1>BIKUN </h1>
+                <h2>Fleet</h2>
+                <ul>
+                    <li class="nav-item">
+                        <a href="index.xhtml">Tracker</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="SPJ.xhtml">SPJ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bus.xhtml">BUS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="rute.xhtml">Route</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="driver.xhtml">Driver</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <img src="/bikun/picture/sidebar.png" alt="BikunFleet,BikunTracker, Ui Logo" />
+            </div>
+        </nav>
+
+        <!-- Main content section -->
+        <div class="content">
+            <ui:insert name="body"/>
+        </div>
+    </div>
+
+    <ui:insert name="js"/>
+</h:body>
+</html>

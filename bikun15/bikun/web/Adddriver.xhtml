@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="mb-4 text-center">Add Driver</h1>
+
+            <h:form id="addDriverForm">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="namaDriver" value="Nama Driver:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="namaDriver" value="#{driverBean.newDriver.namaDriver}" required="true" class="form-control">
+                            <f:ajax event="blur" render="namaDriverError" />
+                        </h:inputText>
+                        <h:message for="namaDriver" id="namaDriverError" style="color: red;" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="No sim" value="License Number:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="licenseNumber" value="#{driverBean.newDriver.noSim}" required="true" 
+                                     validator="#{driverBean.noSimValidator}" class="form-control">
+                            <f:ajax event="keyup" render="licenseNumberError" />
+                            <f:attribute name="placeholder" value="Enter License Number" />
+                        </h:inputText>
+                        <h:message for="licenseNumber" id="licenseNumberError" style="color: red;" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="operator" value="Operator:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:selectOneMenu id="operator" value="#{driverBean.newDriver.operator}" required="true" class="form-control">
+                            <f:selectItem itemLabel="Select Operator" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="DAMRI" itemValue="DAMRI" />
+                            <f:selectItem itemLabel="UI" itemValue="UI" />
+                            <f:selectItem itemLabel="Other" itemValue="Other" />
+                        </h:selectOneMenu>
+                        <h:message for="operator" style="color: red;" />
+                    </div>
+                </div>
+
+
+                <div class="row mt-4">
+                    <div class="col-md-6 text-center">
+                        <h:commandButton value="Save" action="#{driverBean.addDriver()}" styleClass="btn btn-success btn-block" />
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h:commandButton value="Back" action="driver.xhtml" immediate="true" styleClass="btn btn-secondary btn-block" />
+                    </div>
+                </div>
+
+                <!-- Global Error Messages -->
+                <div class="row mt-2">
+                    <div class="col-md-12 text-center">
+                        <h:messages globalOnly="true" layout="table" styleClass="error-messages text-center" style="color: red;" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

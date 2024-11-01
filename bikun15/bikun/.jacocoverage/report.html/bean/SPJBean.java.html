@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SPJBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">SPJBean.java</span></div><h1>SPJBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.SPJDAO;
+import helper.FacesContextHelper; // Import the helper
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.inject.Inject; // Import for dependency injection
+import java.io.Serializable;
+import java.util.List;
+import pojo.Fleet;
+
+@ManagedBean(name = &quot;spjBean&quot;)
+@ViewScoped
+public class SPJBean implements Serializable {
+
+    private final SPJDAO spjDAO;
+    private final FacesContextHelper facesContextHelper; // Helper for managing messages
+    private List&lt;Fleet&gt; fleetList;
+<span class="fc" id="L20">    private Fleet selectedFleet = new Fleet();</span>
+<span class="fc" id="L21">    private Fleet newFleet = new Fleet();</span>
+
+    // Constructor for dependency injection with SPJDAO and FacesContextHelper
+    @Inject
+<span class="fc" id="L25">    public SPJBean(SPJDAO spjDAO, FacesContextHelper facesContextHelper) {</span>
+<span class="fc" id="L26">        this.spjDAO = spjDAO;</span>
+<span class="fc" id="L27">        this.facesContextHelper = facesContextHelper;</span>
+<span class="fc" id="L28">        loadFleet();</span>
+<span class="fc" id="L29">    }</span>
+
+    // Default constructor used when no injection
+    public SPJBean() {
+<span class="nc" id="L33">        this(new SPJDAO(), new FacesContextHelper()); // Instantiate default DAO and Helper</span>
+<span class="nc" id="L34">    }</span>
+
+    public void loadFleet() {
+<span class="fc" id="L37">        fleetList = this.spjDAO.getAllFleets();</span>
+<span class="fc" id="L38">        System.out.println(&quot;fleetList di loadFleet(): &quot; + fleetList); // debug fleetList</span>
+<span class="fc" id="L39">    }</span>
+
+    public List&lt;Fleet&gt; getFleetList() {
+<span class="nc" id="L42">        return fleetList;</span>
+    }
+
+    public Fleet getSelectedFleet() {
+<span class="fc" id="L46">        return selectedFleet;</span>
+    }
+
+    public Fleet getNewFleet() {
+<span class="fc" id="L50">        return newFleet;</span>
+    }
+
+    public void addSPJ() {
+<span class="fc" id="L54">        System.out.println(&quot;Bus yang dipilih: &quot; + newFleet.getBus());</span>
+<span class="fc" id="L55">        System.out.println(&quot;Driver yang dipilih: &quot; + newFleet.getDriver());</span>
+<span class="fc" id="L56">        System.out.println(&quot;Rute yang dipilih: &quot; + newFleet.getRute());</span>
+
+<span class="pc bpc" id="L58" title="2 of 6 branches missed.">        if (newFleet.getBus() == null || newFleet.getDriver() == null || newFleet.getRute() == null) {</span>
+<span class="fc" id="L59">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+                    &quot;Harap pilih Bus, Driver, dan Rute!&quot;, null));
+<span class="fc" id="L61">            return;</span>
+        }
+        try {
+<span class="fc" id="L64">            spjDAO.addSPJ(newFleet);</span>
+<span class="fc" id="L65">            spjDAO.updateBusStatus(newFleet.getBus().getIdBus(), &quot;deploy&quot;);</span>
+<span class="fc" id="L66">            loadFleet(); // perbarui fleetlist</span>
+<span class="fc" id="L67">            resetNewFleet();</span>
+<span class="fc" id="L68">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,</span>
+                    &quot;SPJ berhasil ditambahkan!&quot;, null));
+<span class="nc" id="L70">        } catch (Exception e) {</span>
+<span class="nc" id="L71">            e.printStackTrace();</span>
+<span class="nc" id="L72">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L73">                    &quot;Error saat menambahkan SPJ: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">    }</span>
+
+    public void update() {
+        try {
+<span class="fc" id="L79">            spjDAO.updateSPJ(selectedFleet);</span>
+<span class="fc" id="L80">            loadFleet(); // memanggil loadFleet untuk memperbarui daftar fleet</span>
+<span class="fc" id="L81">            resetSelectedFleet();</span>
+<span class="fc" id="L82">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,</span>
+                    &quot;SPJ berhasil diperbarui!&quot;, null));
+<span class="nc" id="L84">        } catch (Exception e) {</span>
+<span class="nc" id="L85">            e.printStackTrace();</span>
+<span class="nc" id="L86">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="nc" id="L87">                    &quot;Kesalahan saat memperbarui SPJ: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L88">        }</span>
+<span class="fc" id="L89">    }</span>
+
+    public void delete(Fleet fleet) {
+        try {
+<span class="fc" id="L93">            spjDAO.deleteSPJ(fleet);</span>
+<span class="fc" id="L94">            spjDAO.updateBusStatus(fleet.getBus().getIdBus(), &quot;depot&quot;);</span>
+<span class="fc" id="L95">            loadFleet();</span>
+<span class="fc" id="L96">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,</span>
+                    &quot;SPJ berhasil dihapus!&quot;, null));
+<span class="fc" id="L98">        } catch (Exception e) {</span>
+<span class="fc" id="L99">            e.printStackTrace();</span>
+<span class="fc" id="L100">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,</span>
+<span class="fc" id="L101">                    &quot;Kesalahan saat menghapus SPJ: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L102">        }</span>
+<span class="fc" id="L103">    }</span>
+
+    public void resetNewFleet() {
+<span class="fc" id="L106">        newFleet = new Fleet();</span>
+<span class="fc" id="L107">    }</span>
+
+    public void resetSelectedFleet() {
+<span class="fc" id="L110">        selectedFleet = new Fleet();</span>
+<span class="fc" id="L111">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

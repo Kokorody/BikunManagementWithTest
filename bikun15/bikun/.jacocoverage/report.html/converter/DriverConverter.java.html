@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DriverConverter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">converter</a> &gt; <span class="el_source">DriverConverter.java</span></div><h1>DriverConverter.java</h1><pre class="source lang-java linenums">//package converter;
+//
+//import javax.faces.component.UIComponent;
+//import javax.faces.context.FacesContext;
+//import javax.faces.convert.Converter;
+//import javax.faces.convert.FacesConverter;
+//import pojo.Driver;
+//import bean.DriverBean;
+//
+//@FacesConverter(&quot;DriverConverter&quot;)
+//public class DriverConverter implements Converter {
+//
+//    @Override
+//    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+//        if (value == null || value.isEmpty()) {
+//            return null;
+//        }
+//        DriverBean driverBean = context.getApplication().evaluateExpressionGet(context, &quot;#{driverBean}&quot;, DriverBean.class);
+//        return driverBean.getDriverById(Integer.parseInt(value));  // Fetch Driver by namaDriver
+//    }
+//
+//    @Override
+//    public String getAsString(FacesContext context, UIComponent component, Object value) {
+//        if (value == null) {
+//            return &quot;&quot;;
+//        }
+//        if (value instanceof Driver) {
+//            return String.valueOf(((Driver) value).getIdDriver()); // Return id_driver as String
+//        } else {
+//            throw new IllegalArgumentException(&quot;Object is not a valid Driver instance&quot;);
+//        }
+//    }
+//}
+
+
+package converter;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+import pojo.Driver;
+import bean.DriverBean;
+
+@FacesConverter(&quot;DriverConverter&quot;)
+<span class="nc" id="L46">public class DriverConverter implements Converter {</span>
+
+    @Override
+    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+<span class="nc bnc" id="L50" title="All 4 branches missed.">         if (value == null || value.isEmpty()) {</span>
+<span class="nc" id="L51">               return null;</span>
+           }
+
+<span class="nc" id="L54">           DriverBean driverBean = context.getApplication().evaluateExpressionGet(context, &quot;#{driverBean}&quot;, DriverBean.class);</span>
+ // debug untuk driver yang dipilih
+<span class="nc" id="L56">      System.out.println(&quot;Nilai string di  DriverConverter : &quot;+ value);</span>
+
+
+
+
+
+<span class="nc" id="L62">          Driver theDriver = driverBean.getDriverById(Integer.parseInt(value));</span>
+
+
+
+<span class="nc" id="L66">            System.out.println(&quot;Driver yang diambil dari getDriverById: &quot;+ theDriver);</span>
+
+
+
+
+
+<span class="nc" id="L72"> return theDriver;</span>
+ }
+
+
+
+ @Override
+
+  public String getAsString(FacesContext context, UIComponent component, Object value) {
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">     if (value == null) {</span>
+<span class="nc" id="L82">      return null;</span>
+
+
+   }
+
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">     if (!(value instanceof Driver)) {</span>
+
+
+<span class="nc" id="L91">             throw new IllegalArgumentException(&quot;The object is not a valid Driver instance: &quot; + value);</span>
+
+
+
+
+           }
+
+ // pengecekan driver
+
+<span class="nc" id="L100">           System.out.println(&quot;Driver yang dicek di getAsString Converter: &quot;+ value);</span>
+
+
+
+<span class="nc" id="L104">       return String.valueOf(((Driver) value).getIdDriver());</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

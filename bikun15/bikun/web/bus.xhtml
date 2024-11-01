@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <div class="container mt-5">
+            <h1 class="text-center">BUS</h1>
+
+            <!-- Bus Table -->
+            <h:form id="busForm">
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <h:dataTable value="#{busBean.busList}" var="bus" class="table table-hover">
+                            <h:column>
+                                <f:facet name="header">ID Bus</f:facet>
+                                <h:outputText value="#{bus.idBus}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">No Body</f:facet>
+                                <h:outputText value="#{bus.noBody}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Plat Nomor</f:facet>
+                                <h:outputText value="#{bus.platNomor}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Tipe Bus</f:facet>
+                                <h:outputText value="#{bus.tipeBus}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Pemilik</f:facet>
+                                <h:outputText value="#{bus.pemilik}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Status</f:facet>
+                                <h:outputText value="#{bus.status}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                <h:commandButton value="Edit" action="#{busBean.edit(bus)}" styleClass="btn btn-primary btn-sm" />
+                                <h:commandButton value="Delete" action="#{busBean.delete(bus)}" styleClass="btn btn-danger btn-sm" />
+                            </h:column>
+                        </h:dataTable>
+                    </tbody>
+                </table>
+
+                <!-- Add Bus Button -->
+                <h:commandButton value="ADD BUS" action="Addbus.xhtml" styleClass="btn btn-secondary mx-2" />
+            </h:form>
+
+            <!-- Edit Bus Form -->
+            <h:form id="editForm" rendered="#{busBean.editFormVisible}">
+                <h3 class="text-center mb-4">Edit Bus</h3>
+<!--                
+                 Row for ID Bus 
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editIdBus" value="ID Bus:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editIdBus" value="#{busBean.selectedBus.idBus}" required="true" class="form-control">
+                            <f:ajax event="keyup" render="editIdBusError" />
+                            <f:attribute name="placeholder" value="Enter ID Bus" />
+                        </h:inputText>
+                        <h:message for="editIdBus" id="editIdBusError" style="color: red;" />
+                    </div>
+                </div>-->
+
+                <!-- Row for No Body -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editNoBody" value="No Body:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editNoBody" value="#{busBean.selectedBus.noBody}" required="true" 
+                                     validator="#{busBean.noBodyValidator}" class="form-control">
+                            <f:ajax event="keyup" render="editNoBodyError" />
+                            <f:attribute name="placeholder" value="Enter No Body" />
+                        </h:inputText>
+                        <h:message for="editNoBody" id="editNoBodyError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Row for Plat Nomor -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editPlatNomor" value="Plat Nomor:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editPlatNomor" value="#{busBean.selectedBus.platNomor}" required="true" 
+                                     validator="#{busBean.platNomorValidator}" class="form-control">
+                            <f:ajax event="keyup" render="editPlatNomorError" />
+                            <f:attribute name="placeholder" value="Enter Plat Nomor" />
+                        </h:inputText>
+                        <h:message for="editPlatNomor" id="editPlatNomorError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Row for Tipe Bus -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editTipeBus" value="Tipe Bus:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editTipeBus" value="#{busBean.selectedBus.tipeBus}" required="true" class="form-control">
+                            <f:ajax event="keyup" render="editTipeBusError" />
+                            <f:attribute name="placeholder" value="Enter Tipe Bus" />
+                        </h:inputText>
+                        <h:message for="editTipeBus" id="editTipeBusError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Row for Pemilik -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editPemilik" value="Pemilik:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:inputText id="editPemilik" value="#{busBean.selectedBus.pemilik}" class="form-control">
+                            <f:attribute name="placeholder" value="Enter Pemilik" />
+                        </h:inputText>
+                        <h:message for="editPemilik" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Row for Status -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <h:outputLabel for="editStatus" value="Status:" class="form-label" />
+                    </div>
+                    <div class="col-md-9">
+                        <h:selectOneMenu id="editStatus" value="#{busBean.selectedBus.status}" required="true" class="form-control">
+                            <f:selectItem itemLabel="Select Status" itemValue="" />
+                            <f:selectItem itemLabel="Depot" itemValue="depot" />
+                            <f:selectItem itemLabel="Maintenance" itemValue="maintenance" />
+                            <f:ajax event="change" render="editStatusError" />
+                        </h:selectOneMenu>
+                        <h:message for="editStatus" id="editStatusError" style="color: red;" />
+                    </div>
+                </div>
+
+                <!-- Button Row -->
+                <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                        <h:commandButton value="Update" action="#{busBean.update()}" styleClass="btn btn-success mx-2" />
+                        <h:commandButton value="Cancel" action="#{busBean.resetSelectedBus()}" styleClass="btn btn-secondary mx-2" immediate="true" />
+                    </div>
+                </div>
+
+                <!-- Global Error Messages -->
+                <div class="row mt-2">
+                    <div class="col-md-12 text-center">
+                        <h:messages globalOnly="true" layout="table" styleClass="error-messages text-center" style="color: red;" />
+                    </div>
+                </div>
+
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

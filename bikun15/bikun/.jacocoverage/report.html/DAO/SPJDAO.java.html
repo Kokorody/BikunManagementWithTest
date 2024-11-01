@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SPJDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">SPJDAO.java</span></div><h1>SPJDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import pojo.Fleet;  
+import java.util.List;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+
+public class SPJDAO {
+    private SessionFactory sessionFactory;
+
+<span class="fc" id="L15">    public SPJDAO() {</span>
+<span class="fc" id="L16">        sessionFactory = new Configuration().configure(&quot;hibernate.cfg.xml&quot;).buildSessionFactory();</span>
+<span class="fc" id="L17">    }</span>
+
+    public List&lt;Fleet&gt; getAllFleets() {
+<span class="fc" id="L20">        Session session = sessionFactory.openSession();  // Open a new session</span>
+        try {
+<span class="fc" id="L22">            String hql = &quot;FROM Fleet&quot;;  // HQL query to select all Fleet records</span>
+<span class="fc" id="L23">            Query query = session.createQuery(hql);  // Create the query</span>
+<span class="fc" id="L24">            List&lt;Fleet&gt; fleetList = query.list();  // Execute the query</span>
+
+            // Initialize associations if lazy loading is still being attempted
+<span class="fc bfc" id="L27" title="All 2 branches covered.">            for (Fleet fleet : fleetList) {</span>
+<span class="fc" id="L28">                Hibernate.initialize(fleet.getBus());</span>
+<span class="fc" id="L29">                Hibernate.initialize(fleet.getDriver());</span>
+<span class="fc" id="L30">                Hibernate.initialize(fleet.getRute());</span>
+<span class="fc" id="L31">            }</span>
+
+<span class="fc" id="L33">            return fleetList;  // Return the results</span>
+        } finally {
+<span class="pc" id="L35">            session.close();  // Ensure the session is closed</span>
+        }
+    }
+
+
+
+    public void addSPJ(Fleet fleet) {
+<span class="fc" id="L42">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L43">        Transaction tx = null;</span>
+        try {
+<span class="fc" id="L45">            tx = session.beginTransaction();</span>
+<span class="fc" id="L46">            session.save(fleet);</span>
+<span class="fc" id="L47">            tx.commit();</span>
+<span class="fc" id="L48">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (tx != null) tx.rollback(); // Rollback in case of error</span>
+<span class="fc" id="L50">            throw e; // Re-throw the exception for further handling</span>
+        } finally {
+<span class="fc" id="L52">            session.close(); // Ensure session is closed</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">    }</span>
+
+    public void updateSPJ(Fleet fleet) {
+<span class="fc" id="L57">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L58">        Transaction tx = null;</span>
+        try {
+<span class="fc" id="L60">            tx = session.beginTransaction();</span>
+<span class="fc" id="L61">            session.update(fleet);</span>
+<span class="fc" id="L62">            tx.commit();</span>
+<span class="fc" id="L63">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            if (tx != null) tx.rollback(); // Rollback in case of error</span>
+<span class="fc" id="L65">            throw e; // Re-throw the exception for further handling</span>
+        } finally {
+<span class="fc" id="L67">            session.close(); // Ensure session is closed</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">    }</span>
+
+    public void deleteSPJ(Fleet fleet) {
+<span class="fc" id="L72">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L73">        Transaction tx = null;</span>
+        try {
+<span class="fc" id="L75">            tx = session.beginTransaction();</span>
+<span class="fc" id="L76">            session.delete(fleet);</span>
+<span class="fc" id="L77">            tx.commit();</span>
+<span class="fc" id="L78">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            if (tx != null) tx.rollback(); // Rollback in case of error</span>
+<span class="fc" id="L80">            throw e; // Re-throw the exception for further handling</span>
+        } finally {
+<span class="fc" id="L82">            session.close(); // Ensure session is closed</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">    }</span>
+    
+    public void updateBusStatus(int id_bus, String status) {
+<span class="fc" id="L87">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L88">        Transaction tx = null;</span>
+        try {
+<span class="fc" id="L90">            tx = session.beginTransaction();</span>
+<span class="fc" id="L91">            session.createQuery(&quot;UPDATE Bus SET status = :status WHERE id_bus = :id_bus&quot;)</span>
+<span class="fc" id="L92">                   .setParameter(&quot;status&quot;, status)</span>
+<span class="fc" id="L93">                   .setParameter(&quot;id_bus&quot;, id_bus)</span>
+<span class="fc" id="L94">                   .executeUpdate();</span>
+<span class="fc" id="L95">            tx.commit();</span>
+<span class="fc" id="L96">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">            if (tx != null) tx.rollback(); // Rollback in case of error</span>
+<span class="fc" id="L98">            throw e; // Re-throw the exception for further handling</span>
+        } finally {
+<span class="fc" id="L100">            session.close(); // Ensure session is closed</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">    }</span>
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

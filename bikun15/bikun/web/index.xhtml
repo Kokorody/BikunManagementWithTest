@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="sidebar.xhtml">
+    <ui:define name="body">
+        <style>
+            
+            .h2 {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+            /* Container for map and text */
+            .map-container {
+                display: flex;
+                justify-content: space-between; /* Space between map and text */
+                align-items: flex-start;
+            }
+
+            /* Map styling */
+            .map-container embed {
+                flex: 1; /* Let the map take up available space */
+                width: 100%;
+                height: 660px;
+            }
+
+            /* Text content styling */
+            .text-content {
+                flex: 1;
+                max-width: 400px; /* Adjust as needed */
+                font-size: 14px;
+            }
+
+            .text-content p, .text-content ol {
+                margin: 10px 0;
+            }
+
+            .list-decimal {
+                list-style-type: decimal;
+                padding-left: 20px;
+            }
+
+            .list-disc {
+                list-style-type: disc;
+                padding-left: 20px;
+            }
+
+            .list-inside {
+                margin-left: 10px;
+            }
+
+            /* Optional styling for responsive design */
+            @media screen and (max-width: 768px) {
+                .map-container {
+                    flex-direction: column; /* Stack map and text on smaller screens */
+                }
+
+                .text-content {
+                    max-width: 100%;
+                }
+            }
+        </style> 
+        <div class="container mt-5">
+            <h2 class="text-center">Tracker is still WIP</h2>
+            <p class="text-center">This BIKUN tracker is provided by <a href="https://bikun.ui.ac.id/" targer='_blank'>BikunTracker</a> by RistekUi and Hive</p>
+        <!-- Container for map and text -->
+        <div class="map-container">
+            <!-- Embedded map -->
+            <embed src="https://bikun.ui.ac.id/" style="width: 100%; height: 700px;"></embed>         
+        </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RuteDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">RuteDAO.java</span></div><h1>RuteDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import pojo.Rute;
+import java.util.List;
+
+public class RuteDAO {
+
+    private SessionFactory sessionFactory;
+
+<span class="fc" id="L14">    public RuteDAO() {</span>
+<span class="fc" id="L15">        sessionFactory = new Configuration().configure(&quot;hibernate.cfg.xml&quot;).buildSessionFactory();</span>
+<span class="fc" id="L16">    }</span>
+
+    // Method to retrieve all Rutes
+    public List&lt;Rute&gt; getAllRutes() {
+<span class="fc" id="L20">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L21">        List&lt;Rute&gt; rutes = (List&lt;Rute&gt;) session.createQuery(&quot;from Rute&quot;).list();</span>
+<span class="fc" id="L22">        session.close();</span>
+<span class="fc" id="L23">        return rutes;</span>
+    }
+
+    // Method to add a new rute
+    public void addRute(Rute rute) {
+<span class="fc" id="L28">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L29">        Transaction tx = session.beginTransaction();</span>
+        try {
+<span class="fc" id="L31">            session.save(rute);</span>
+<span class="fc" id="L32">            tx.commit();</span>
+<span class="fc" id="L33">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">            if (tx != null) tx.rollback();</span>
+<span class="fc" id="L35">            throw e; // Propagate exception</span>
+        } finally {
+<span class="fc" id="L37">            session.close();</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
+
+    // Method to delete a rute
+    public void deleteRute(Rute rute) {
+<span class="fc" id="L43">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L44">        Transaction tx = session.beginTransaction();</span>
+        try {
+<span class="fc" id="L46">            session.delete(rute);</span>
+<span class="fc" id="L47">            tx.commit();</span>
+<span class="fc" id="L48">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (tx != null) tx.rollback();</span>
+<span class="fc" id="L50">            throw e; // Propagate exception</span>
+        } finally {
+<span class="fc" id="L52">            session.close();</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">    }</span>
+
+    // Method to update a rute
+    public void updateRute(Rute rute) {
+<span class="fc" id="L58">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L59">        Transaction tx = session.beginTransaction();</span>
+        try {
+<span class="fc" id="L61">            session.merge(rute); // Use merge instead of update</span>
+<span class="fc" id="L62">            tx.commit();</span>
+<span class="fc" id="L63">        } catch (Exception e) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            if (tx != null) tx.rollback();</span>
+<span class="fc" id="L65">            throw e; // Propagate exception</span>
+        } finally {
+<span class="fc" id="L67">            session.close();</span>
+<span class="fc" id="L68">        }</span>
+        
+<span class="fc" id="L70">    }</span>
+    
+    public Rute findById(String id) {
+<span class="fc" id="L73">        Session session = sessionFactory.openSession();</span>
+<span class="fc" id="L74">        Rute rute = (Rute) session.get(Rute.class, id); // Cast to Rute</span>
+<span class="fc" id="L75">        session.close();</span>
+<span class="fc" id="L76">        return rute;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

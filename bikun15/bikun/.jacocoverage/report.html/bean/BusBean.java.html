@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BusBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;bikun&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">bean</a> &gt; <span class="el_source">BusBean.java</span></div><h1>BusBean.java</h1><pre class="source lang-java linenums">package bean;
+
+import DAO.BusDAO;
+import helper.FacesContextHelper;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.regex.Pattern;
+import javax.faces.context.FacesContext;
+import pojo.Bus;
+
+@ManagedBean(name = &quot;busBean&quot;)
+@ViewScoped
+public class BusBean implements Serializable {
+
+    private final BusDAO busDAO; // Now injected via constructor
+    private List&lt;Bus&gt; busList;
+    private List&lt;Bus&gt; availableBuses; // List for available buses
+<span class="fc" id="L23">    private Bus selectedBus = new Bus();</span>
+<span class="fc" id="L24">    private Bus newBus = new Bus();</span>
+<span class="fc" id="L25">    private boolean editFormVisible = false;</span>
+<span class="fc" id="L26">    private boolean addFormVisible = false;</span>
+
+    // Inject FacesContextHelper (Constructor Injection or Setter Injection can be used)
+    private FacesContextHelper facesContextHelper;
+
+    // Regex patterns for validation
+<span class="fc" id="L32">    private static final Pattern NO_BODY_PATTERN = Pattern.compile(&quot;^[A-Z]{3}-[0-9]{4}$&quot;); </span>
+<span class="fc" id="L33">    private static final Pattern PLAT_NOMOR_PATTERN = Pattern.compile(&quot;^[A-Z]{1,2} [0-9]{1,4} [A-Z]{1,2}$&quot;);</span>
+
+    // Constructor for dependency injection with both BusDAO and FacesContextHelper
+<span class="fc" id="L36">    public BusBean(BusDAO busDAO, FacesContextHelper facesContextHelper) {</span>
+<span class="fc" id="L37">        this.busDAO = busDAO;</span>
+<span class="fc" id="L38">        this.facesContextHelper = facesContextHelper;</span>
+<span class="fc" id="L39">        loadBuses();</span>
+<span class="fc" id="L40">        loadAvailableBuses(); // Load available buses</span>
+<span class="fc" id="L41">    }</span>
+
+    // Constructor for injecting only BusDAO (use default FacesContextHelper)
+    public BusBean(BusDAO busDAO) {
+<span class="fc" id="L45">        this(busDAO, new FacesContextHelper()); // Call the main constructor with default FacesContextHelper</span>
+<span class="fc" id="L46">    }</span>
+
+    // Default constructor used when no injection (can still be instantiated with default DAO and Helper)
+    public BusBean() {
+<span class="nc" id="L50">        this(new BusDAO(), new FacesContextHelper()); // Instantiate default DAO and Helper</span>
+<span class="nc" id="L51">    }</span>
+
+    // Setter to inject FacesContextHelper (Useful for testing)
+    public void setFacesContextHelper(FacesContextHelper facesContextHelper) {
+<span class="fc" id="L55">        this.facesContextHelper = facesContextHelper;</span>
+<span class="fc" id="L56">    }</span>
+
+    // Method to load all buses from the DAO
+    public void loadBuses() {
+<span class="fc" id="L60">        busList = busDAO.getAllBuses();</span>
+<span class="fc" id="L61">    }</span>
+
+
+    // Method to load available buses from the DAO
+    public void loadAvailableBuses() {
+<span class="fc" id="L66">        availableBuses = busDAO.getAvailableBuses(); // Get available buses</span>
+<span class="fc" id="L67">    }</span>
+
+    // Getter methods
+    public List&lt;Bus&gt; getBusList() {
+<span class="fc" id="L71">        return busList;</span>
+    }
+
+    public List&lt;Bus&gt; getAvailableBuses() {
+<span class="fc" id="L75">        return availableBuses;</span>
+    }
+
+    public Bus getSelectedBus() {
+<span class="fc" id="L79">        return selectedBus;</span>
+    }
+
+    public Bus getNewBus() {
+<span class="fc" id="L83">        return newBus;</span>
+    }
+
+    public boolean isEditFormVisible() {
+<span class="fc" id="L87">        return editFormVisible;</span>
+    }
+
+    public boolean isAddFormVisible() {
+<span class="fc" id="L91">        return addFormVisible;</span>
+    }
+
+    // Method to add a new bus
+    public void addBus() {
+        try {
+            // Perform validation checks before adding
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (isFormValid()) {</span>
+<span class="fc" id="L99">                busDAO.addBus(newBus);</span>
+<span class="fc" id="L100">                loadBuses();</span>
+<span class="fc" id="L101">                loadAvailableBuses(); // Reload available buses</span>
+<span class="fc" id="L102">                resetNewBus();</span>
+<span class="fc" id="L103">                facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Bus added successfully!&quot;, null));</span>
+            }
+<span class="fc" id="L105">        } catch (Exception e) {</span>
+<span class="fc" id="L106">            e.printStackTrace(); // Log the exception for debugging</span>
+<span class="fc" id="L107">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error adding bus: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
+
+    // Method to edit an existing bus
+    public void edit(Bus bus) {
+<span class="fc" id="L113">        this.selectedBus = bus;</span>
+<span class="fc" id="L114">        this.editFormVisible = true;</span>
+<span class="fc" id="L115">    }</span>
+
+    // Method to update bus data
+    public void update() {
+        try {
+<span class="fc" id="L120">            busDAO.updateBus(selectedBus);</span>
+<span class="fc" id="L121">            loadBuses();</span>
+<span class="fc" id="L122">            loadAvailableBuses(); // Reload available buses</span>
+<span class="fc" id="L123">            resetSelectedBus();</span>
+<span class="fc" id="L124">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Bus updated successfully!&quot;, null));</span>
+<span class="fc" id="L125">        } catch (Exception e) {</span>
+<span class="fc" id="L126">            e.printStackTrace(); // Log the exception for debugging</span>
+<span class="fc" id="L127">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error updating bus: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">    }</span>
+
+    // Method to delete a bus
+    public void delete(Bus bus) {
+        try {
+<span class="fc" id="L134">            busDAO.deleteBus(bus);</span>
+<span class="fc" id="L135">            loadBuses();</span>
+<span class="fc" id="L136">            loadAvailableBuses(); // Reload available buses</span>
+<span class="fc" id="L137">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, &quot;Bus deleted successfully!&quot;, null));</span>
+<span class="fc" id="L138">        } catch (Exception e) {</span>
+<span class="fc" id="L139">            e.printStackTrace(); // Log the exception for debugging</span>
+<span class="fc" id="L140">            facesContextHelper.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Error deleting bus: &quot; + e.getMessage(), null));</span>
+<span class="fc" id="L141">        }</span>
+<span class="fc" id="L142">    }</span>
+
+    // Reset form for adding a new bus
+    public void resetNewBus() {
+<span class="fc" id="L146">        this.newBus = new Bus();</span>
+<span class="fc" id="L147">        this.addFormVisible = false;</span>
+<span class="fc" id="L148">    }</span>
+
+    // Reset the selected bus after editing
+    public void resetSelectedBus() {
+<span class="fc" id="L152">        this.selectedBus = new Bus();</span>
+<span class="fc" id="L153">        this.editFormVisible = false;</span>
+<span class="fc" id="L154">    }</span>
+
+    // Validation for noBody field
+    public void noBodyValidator(FacesContext context, UIComponent component, Object value) {
+<span class="fc" id="L158">        String noBody = (String) value;</span>
+<span class="pc bpc" id="L159" title="2 of 4 branches missed.">        if (noBody == null || !NO_BODY_PATTERN.matcher(noBody).matches()) {</span>
+<span class="fc" id="L160">            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, </span>
+                &quot;Invalid No Body format. Use: XXX-0000&quot;, null));
+        }
+<span class="nc" id="L163">    }</span>
+
+    // Validation for platNomor field
+    public void platNomorValidator(FacesContext context, UIComponent component, Object value) {
+<span class="fc" id="L167">        String platNomor = (String) value;</span>
+<span class="pc bpc" id="L168" title="2 of 4 branches missed.">        if (platNomor == null || !PLAT_NOMOR_PATTERN.matcher(platNomor).matches()) {</span>
+<span class="fc" id="L169">            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, </span>
+                &quot;Invalid Plat Nomor format. Use: A-Z 0-9 A-Z&quot;, null));
+        }
+<span class="nc" id="L172">    }</span>
+
+    // Validation for tipeBus field
+    public void tipeBusValidator(FacesContext context, UIComponent component, Object value) {
+<span class="fc" id="L176">        String tipeBus = (String) value;</span>
+<span class="pc bpc" id="L177" title="2 of 4 branches missed.">        if (tipeBus == null || tipeBus.length() &lt; 3) {</span>
+<span class="fc" id="L178">            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, </span>
+                &quot;Tipe Bus must be at least 3 characters&quot;, null));
+        }
+<span class="nc" id="L181">    }</span>
+
+    // Additional form validation for the &quot;Save&quot; action
+    private boolean isFormValid() {
+<span class="fc" id="L185">        boolean valid = true;</span>
+
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (!isNoBodyValid()) {</span>
+<span class="fc" id="L188">            facesContextHelper.addMessage(&quot;noBody&quot;, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Invalid No Body format&quot;, null));
+<span class="fc" id="L190">            valid = false;</span>
+        }
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (!isPlatNomorValid()) {</span>
+<span class="fc" id="L193">            facesContextHelper.addMessage(&quot;platNomor&quot;, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Invalid Plat Nomor format&quot;, null));
+<span class="fc" id="L195">            valid = false;</span>
+        }
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (!isTipeBusValid()) {</span>
+<span class="fc" id="L198">            facesContextHelper.addMessage(&quot;tipeBus&quot;, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Tipe Bus must be at least 3 characters&quot;, null));
+<span class="fc" id="L200">            valid = false;</span>
+        }
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (!isStatusValid()) {</span>
+<span class="fc" id="L203">            facesContextHelper.addMessage(&quot;status&quot;, </span>
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, &quot;Please select a valid status&quot;, null));
+<span class="fc" id="L205">            valid = false;</span>
+        }
+
+<span class="fc" id="L208">        return valid;</span>
+    }
+
+    // Check if noBody is valid
+    public boolean isNoBodyValid() {
+<span class="fc" id="L213">        String noBody = newBus.getNoBody();</span>
+<span class="pc bpc" id="L214" title="1 of 4 branches missed.">        return noBody != null &amp;&amp; NO_BODY_PATTERN.matcher(noBody).matches();</span>
+    }
+
+    // Check if platNomor is valid
+    public boolean isPlatNomorValid() {
+<span class="fc" id="L219">        String platNomor = newBus.getPlatNomor();</span>
+<span class="fc bfc" id="L220" title="All 4 branches covered.">        return platNomor != null &amp;&amp; PLAT_NOMOR_PATTERN.matcher(platNomor).matches();</span>
+    }
+
+    // Check if tipeBus is valid
+    public boolean isTipeBusValid() {
+<span class="fc" id="L225">        String tipeBus = newBus.getTipeBus();</span>
+<span class="fc bfc" id="L226" title="All 4 branches covered.">        return tipeBus != null &amp;&amp; tipeBus.length() &gt;= 3;</span>
+    }
+
+    // Check if the status field is valid
+    public boolean isStatusValid() {
+<span class="fc" id="L231">        String status = newBus.getStatus();</span>
+<span class="pc bpc" id="L232" title="5 of 8 branches missed.">        return status != null &amp;&amp; (status.equals(&quot;deploy&quot;) || status.equals(&quot;depot&quot;) || status.equals(&quot;maintenance&quot;));</span>
+    }
+
+    // Fetch a Bus by its idBus (used by the Converter)
+    public Bus getBusById(int idBus) {
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        for (Bus bus : busList) {</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">            if (bus.getIdBus().equals(idBus)) { // Use equals instead of ==</span>
+<span class="nc" id="L239">                return bus;</span>
+            }
+<span class="nc" id="L241">        }</span>
+<span class="nc" id="L242">        return null;  // Return null if no matching Bus is found</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
