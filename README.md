@@ -10,7 +10,7 @@ To ensure a reliable and bug-free platform, we used a comprehensive testing stra
 
 ### Tested Classes and Methods
 
-The Total of the test case/@test method for this is project is 135, we also mainly focuses testing the DAO and Bean cause there's where our business logic located. 
+The Total of the test case/@test method for this is project is 134, we also mainly focuses testing the DAO and Bean cause there's where our business logic located. 
 Here is an overview of the classes and their tested methods for thorough coverage:
 
 - **DAO Tests**:
